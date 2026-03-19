@@ -1,0 +1,33 @@
+{
+  "name": "awrshift-brainstorm",
+  "owner": {
+    "name": "Serhii Kravchenko",
+    "email": "awrshift@proton.me"
+  },
+  "metadata": {
+    "description": "3-round adversarial brainstorm between Claude and Gemini. One idea in, one converged decision out.",
+    "version": "1.0.0",
+    "homepage": "https://github.com/awrshift/skill-brainstorm"
+  },
+  "plugins": [
+    {
+      "name": "brainstorm",
+      "description": "Multi-round brainstorm between Claude and Gemini that turns a single idea into one converged, actionable decision. Use whenever the user wants to brainstorm, ideate, explore strategic options, compare approaches, or think through a decision with multiple viable paths. Also trigger on 'brainstorm', 'let's think through options', 'ideation session', 'explore this idea with Gemini', 'diverge and converge', or when the user wants more than a simple second opinion.",
+      "source": "./",
+      "strict": false,
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "brainstorm",
+        "gemini",
+        "multi-model",
+        "ideation",
+        "decision-making",
+        "adversarial"
+      ],
+      "skills": [
+        "./skills/brainstorm"
+      ]
+    }
+  ]
+}
