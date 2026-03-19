@@ -14,6 +14,16 @@
 
 ---
 
+## Why
+
+A single AI model has blind spots. Two models arguing produce better decisions than one model agreeing with itself. This skill turns Claude into an orchestrator that runs a structured adversarial dialogue with Gemini — grounding facts, challenging assumptions, and killing weak ideas until one winner remains.
+
+<div align="center">
+<img src="assets/pipeline.png" alt="Brainstorm pipeline: Ground → Diverge → Deepen → Converge → Fact-check → One Decision" width="500" />
+</div>
+
+---
+
 ## What It Does
 
 - **Runs a structured 3-round dialogue** between Claude and Gemini Pro — diverge, deepen, converge
