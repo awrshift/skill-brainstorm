@@ -42,9 +42,9 @@ A single AI model has blind spots. Two models arguing produce better decisions t
 **Manual:**
 ```bash
 mkdir -p .claude/skills/brainstorm/scripts
-curl -sL https://raw.githubusercontent.com/awrshift/skill-brainstorm/main/skills/brainstorm/SKILL.md \
+curl -sL https://raw.githubusercontent.com/awrshift/skill-brainstorm/main/SKILL.md \
   -o .claude/skills/brainstorm/SKILL.md
-curl -sL https://raw.githubusercontent.com/awrshift/skill-brainstorm/main/skills/brainstorm/scripts/gemini.py \
+curl -sL https://raw.githubusercontent.com/awrshift/skill-brainstorm/main/scripts/gemini.py \
   -o .claude/skills/brainstorm/scripts/gemini.py
 ```
 
