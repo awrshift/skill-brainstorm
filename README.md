@@ -107,8 +107,8 @@ The skill uses a **two-layer model split** -- a cheaper model handles research, 
 
 **Why two layers?** When one model does both searching AND thinking, it wastes expensive reasoning capacity on simple lookups like "what version is React?" Splitting the work means:
 
-- **Flash-Lite** ($0.25/1M tokens) -- searches the web, verifies facts, checks claims
-- **Pro** ($2/1M tokens) -- all brainpower goes to challenging ideas, finding blind spots, building arguments
+- **Flash-Lite** -- searches the web, verifies facts, checks claims
+- **Pro** -- all brainpower goes to challenging ideas, finding blind spots, building arguments
 
 ---
 
@@ -125,14 +125,18 @@ Every brainstorm produces:
 
 ---
 
-## Cost Per Brainstorm
+## Gemini API Cost
 
-| Component | Calls | Cost |
-|-----------|-------|------|
-| Flash-Lite (research + fact-check) | 2-3 | ~$0.03 |
-| Pro (3 reasoning rounds) | 3 | ~$0.30 |
-| Claude (orchestration) | Included | $0 extra |
-| **Total** | | **~$0.35** |
+Each brainstorm makes 5-6 Gemini API calls. Actual cost depends on how long your prompts and responses are. Here are the per-million-token rates so you can estimate:
+
+| Model | Role in Brainstorm | Calls | Input / 1M tokens | Output / 1M tokens |
+|-------|-------------------|-------|-------------------|-------------------|
+| Flash-Lite (`gemini-3.1-flash-lite-preview`) | Research + fact-check | 2-3 | $0.25 | $1.50 |
+| Pro (`gemini-3.1-pro-preview`) | 3 reasoning rounds | 3 | $2.00 | $12.00 |
+
+Claude orchestration is included in your Claude Code session -- no extra cost.
+
+A typical brainstorm uses roughly 5-15K tokens per Gemini call. Pricing source: [ai.google.dev/gemini-api/docs/pricing](https://ai.google.dev/gemini-api/docs/pricing)
 
 ---
 

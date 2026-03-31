@@ -36,8 +36,8 @@ Two-layer model architecture: **Flash researches, Pro reasons.** Claude orchestr
                      +--Verified Context-+
 ```
 
-**Flash-Lite** (`gemini-3.1-flash-lite-preview`, $0.25/1M, 381 tok/s) searches the web and produces verified facts.
-**Pro** (`gemini-3.1-pro-preview`, $2/1M, #1 reasoning) reasons on those facts without wasting tokens on search.
+**Flash-Lite** (`gemini-3.1-flash-lite-preview`, $0.25/$1.50 per 1M in/out) searches the web and produces verified facts.
+**Pro** (`gemini-3.1-pro-preview`, $2/$12 per 1M in/out) reasons on those facts without wasting tokens on search.
 **Claude** runs its own WebSearch in parallel during Phase 0.5 and Phase 3.5.
 
 ## Version History
@@ -51,7 +51,7 @@ Two-layer model architecture: **Flash researches, Pro reasons.** Claude orchestr
 In v2, Pro with `--grounded` does both searching AND thinking. But search processing is low-value work — it doesn't need deep reasoning to check "what version is Next.js?" Pro's thinking tokens are expensive and should be spent on challenging ideas, finding blind spots, and synthesizing arguments — not on parsing search results.
 
 Splitting the layers means:
-- Flash (grounded): ~$0.15/1M input, 3-5 sec per query, returns verified facts
+- Flash-Lite (grounded): $0.25/$1.50 per 1M in/out, 3-5 sec per query, returns verified facts
 - Pro (ungrounded): all thinking tokens go to critical analysis, gets pre-verified context
 
 ## Process
@@ -281,7 +281,7 @@ Where `{agent}` is the agent's identifier from the project (e.g., `rnd`, `cmo`, 
 
 | Phase | Model | Grounded? | Why |
 |-------|-------|-----------|-----|
-| Phase 0.5 (research) | `gemini-3.1-flash-lite-preview` | YES | Cheapest ($0.25/1M), fastest (381 tok/s), only needs facts |
+| Phase 0.5 (research) | `gemini-3.1-flash-lite-preview` | YES | Cheapest ($0.25/$1.50 per 1M in/out), only needs facts |
 | R1, R2, R3 (reasoning) | `gemini-3.1-pro-preview` | NO | Deep thinking on pre-verified facts |
 | R1.5 mid-verify (if needed) | `gemini-3.1-flash-lite-preview` | YES | Quick check of new technologies |
 | Phase 3.5 (fact-check) | `gemini-3.1-flash-lite-preview` | YES | Final verification, cheapest |
