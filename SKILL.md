@@ -98,7 +98,7 @@ Output format per technology:
 
 **Flash call:**
 ```bash
-python3 $SCRIPT ask @/tmp/brainstorm-${AGENT}-ground.txt \
+python3 $GEMINI ask @/tmp/brainstorm-${AGENT}-ground.txt \
   -m gemini-3.1-flash-lite-preview --grounded --save /tmp/brainstorm-${AGENT}-ground-response.md
 ```
 
@@ -155,7 +155,7 @@ so we can verify it before Round 2.
 
 **Mid-round verification** (only if R1 introduced new technologies):
 ```bash
-python3 $SCRIPT ask "Verify: [new tech from R1]" \
+python3 $GEMINI ask "Verify: [new tech from R1]" \
   -m gemini-3.1-flash-lite-preview --grounded --save /tmp/brainstorm-${AGENT}-r1-verify.md
 ```
 

@@ -1,42 +1,52 @@
 <div align="center">
 
+<img src="assets/pipeline.png" alt="Brainstorm Pipeline: Context, Ground, Diverge, Deepen, Check-in, Converge, Fact-check" width="700" />
+
+# skill-brainstorm
+
+**Two AI models argue so you don't have to. One idea in, one decision out.**
+
+*Claude runs the show. Gemini pushes back. Facts get checked. You pick the winner.*
+
 ![Claude Code](https://img.shields.io/badge/Claude%20Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
 ![Gemini Pro](https://img.shields.io/badge/Gemini%20Pro-4285F4?style=for-the-badge&logo=google&logoColor=white)
 ![License MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
 
-# skill-brainstorm
-
-**3-round adversarial brainstorm between Claude and Gemini. One idea in, one converged decision out.**
-
-*Claude orchestrates. Gemini Flash researches. Gemini Pro reasons. You decide.*
-
 </div>
 
 ---
 
-## Why
+## The Problem
 
-A single AI model has blind spots. Two models arguing produce better decisions than one model agreeing with itself. This skill turns Claude into an orchestrator that runs a structured adversarial dialogue with Gemini — grounding facts, challenging assumptions, and killing weak ideas until one winner remains.
+You have an idea and need to make a decision. You ask one AI -- it agrees with you. You ask another -- it also agrees. Everyone's polite, nobody challenges anything, and you ship something based on vibes.
 
-<div align="center">
-<img src="assets/pipeline.png" alt="Brainstorm pipeline: Ground → Diverge → Deepen → Converge → Fact-check → One Decision" width="500" />
-</div>
+**This skill fixes that.** It runs a structured 3-round adversarial dialogue between Claude and Gemini. Ideas get challenged, weak ones get killed, facts get verified. You end up with one concrete action -- not a list of "options to consider."
 
 ---
 
-## What It Does
+## How It Works (Plain English)
 
-- **Runs a structured 3-round dialogue** between Claude and Gemini Pro — diverge, deepen, converge
-- **Web-grounds all facts before reasoning** using Gemini Flash (dual verification: Claude WebSearch + Flash Google Search)
-- **Kills bad ideas with evidence** — not a polite brainstorm, an adversarial stress-test
-- **Produces one action** — not a list of options, a single concrete deliverable with timeline and go/no-go criteria
-- **Fact-checks the final decision** — catches stale knowledge, pricing changes, deprecated APIs
+Think of it as a board meeting between two opinionated experts:
 
-## Quick Install
+| Step | What Happens | You See |
+|------|-------------|---------|
+| **Context** | You describe what you're building and your constraints | Claude asks clarifying questions if needed |
+| **Research** | Both Claude and Gemini search the web in parallel to verify current facts | A "Verified Context" block with real data |
+| **Round 1: Diverge** | Gemini challenges your framing and proposes 5-7 alternative angles | New ideas you hadn't considered |
+| **Round 2: Deepen** | Claude kills the weak ideas with evidence. Gemini defends or concedes | The field narrows from 7 to 2-3 survivors |
+| **Check-in** | You're asked: "Which direction do you prefer?" | Your input before the final round |
+| **Round 3: Converge** | One winner is chosen with a timeline and success criteria | A single action, not a strategy deck |
+| **Fact-check** | All claims in the final decision are verified against the live web | A confidence table (confirmed/conflict/incorrect) |
+
+The whole process takes 3-5 minutes and costs about $0.35 in API calls.
+
+---
+
+## Install
 
 **Claude Code (recommended):**
 ```
-/plugin marketplace add awrshift/skill-brainstorm
+/install github:awrshift/skill-brainstorm
 ```
 
 **Manual:**
@@ -50,87 +60,118 @@ curl -sL https://raw.githubusercontent.com/awrshift/skill-brainstorm/main/script
 
 ## Requirements
 
-- `GOOGLE_API_KEY` in your `.env` file (get one at [aistudio.google.com](https://aistudio.google.com))
-- `pip install google-genai` (the Gemini Python SDK)
-- Claude Code with WebSearch access
+| What | Why | How to Get |
+|------|-----|-----------|
+| Google API Key | Powers the Gemini calls | Free at [aistudio.google.com](https://aistudio.google.com) |
+| `google-genai` package | Python SDK for Gemini | `pip install google-genai` |
+| Claude Code | Orchestrates the brainstorm | You're probably already using it |
 
-## How It Works
-
+Add your key to a `.env` file in your project:
 ```
-                  Claude (orchestrator)
-                     |         |
-        Phase 0.5    |         |    R1 / R2 / R3
-        Phase 3.5    |         |
-                     v         v
-              Flash-Lite        Pro
-           (research layer)  (reasoning layer)
-                     |              ^
-                     +--Verified----+
-                        Context
+GOOGLE_API_KEY=your-key-here
 ```
 
-### The Pipeline
+---
 
-| Phase | What Happens | Model |
-|-------|-------------|-------|
-| **0: Context** | Gather constraints, goals, existing work | Claude |
-| **0.5: Ground** | Web-verify all technologies, prices, versions | Flash-Lite (grounded) + Claude WebSearch |
-| **R1: Diverge** | Gemini challenges your framing, proposes 5+ angles | Pro (ungrounded) |
-| **R1.5: Verify** | Check any new tech Gemini introduced | Flash-Lite (grounded) |
-| **R2: Deepen** | Claude kills weak ideas, Gemini stress-tests survivors | Pro (ungrounded) |
-| **Check-in** | User picks preference before final convergence | You |
-| **R3: Converge** | One winner, one timeline, one go/no-go signal | Pro (ungrounded) |
-| **3.5: Fact-check** | Dual-verify all claims in the final decision | Flash-Lite + Claude WebSearch |
-| **Synthesize** | Summary table, kill list, final recommendation | Claude |
+## When to Use
 
-### Why Two Layers?
+Just say any of these to Claude:
 
-**Flash** ($0.25/1M tokens) searches the web and verifies facts. **Pro** ($2/1M tokens) does deep reasoning on pre-verified context. This way Pro never wastes expensive thinking tokens on factual lookups.
+- *"Brainstorm how to launch X"*
+- *"Let's think through options for Y"*
+- *"I need to decide between A and B"*
+- *"Explore this idea with Gemini"*
+- *"Diverge and converge on this"*
 
-In v2, we sent everything to Pro with `--grounded`. Problem: Pro spent 40% of thinking tokens parsing search results instead of challenging ideas. v2.1 splits the work — faster, cheaper, better quality.
+The skill triggers automatically. No special commands needed.
 
-## Usage
+---
 
-| You say | What happens |
-|---------|-------------|
-| "Brainstorm how to launch X" | Full 3-round cycle with web grounding |
-| "Let's think through options" | Activates with context gathering phase |
-| "Explore this idea with Gemini" | Diverge → Deepen → Converge |
-| "Diverge and converge on X" | Direct trigger, skips small talk |
-| "I need more than a second opinion" | Upgrade from single Gemini call to full brainstorm |
+## Architecture
+
+The skill uses a **two-layer model split** -- a cheaper model handles research, an expensive model handles reasoning:
+
+```
+              Claude (orchestrator)
+                 |         |
+    Research     |         |     Reasoning
+    phases       |         |     rounds
+                 v         v
+          Flash-Lite        Pro
+       (web search,      (critical thinking,
+        fact-check)       argumentation)
+                 |              ^
+                 +--Verified----+
+                    Context
+```
+
+**Why two layers?** When one model does both searching AND thinking, it wastes expensive reasoning capacity on simple lookups like "what version is React?" Splitting the work means:
+
+- **Flash-Lite** ($0.25/1M tokens) -- searches the web, verifies facts, checks claims
+- **Pro** ($2/1M tokens) -- all brainpower goes to challenging ideas, finding blind spots, building arguments
+
+---
+
+## What You Get at the End
+
+Every brainstorm produces:
+
+1. **One concrete action** -- not 5 options, one thing to do next
+2. **A timeline** -- hours or days, not vague "weeks"
+3. **Go/no-go criteria** -- "if X doesn't happen by Y, abandon this"
+4. **Kill list** -- everything that was considered and why it was rejected
+5. **Fact-check table** -- which claims were verified, which had conflicts
+6. **The full journey** -- 7+ ideas narrowed to 3, then to 1
+
+---
 
 ## Cost Per Brainstorm
 
-| Component | Calls | Est. Cost |
-|-----------|-------|-----------|
-| Flash-Lite (grounding) | 2-3 | ~$0.03 |
-| Pro (reasoning) | 3 | ~$0.30 |
-| Claude (orchestration) | Included in your session | $0 extra |
+| Component | Calls | Cost |
+|-----------|-------|------|
+| Flash-Lite (research + fact-check) | 2-3 | ~$0.03 |
+| Pro (3 reasoning rounds) | 3 | ~$0.30 |
+| Claude (orchestration) | Included | $0 extra |
 | **Total** | | **~$0.35** |
 
-## Key Principles
+---
 
-1. **Flash researches, Pro reasons** — never waste Pro's tokens on factual lookups
-2. **Web-ground before reasoning** — stale facts poison all 3 rounds
-3. **Kill early, kill often** — R1: 7+ ideas, R2: cut to 3, R3: converge to 1
-4. **Constraints are ammunition** — real limits kill impractical ideas
-5. **One action, not a strategy** — R3 ends with a single deliverable + timeline
-6. **Go/no-go criteria** — every brainstorm ends with "if X doesn't happen by Y, abandon"
-7. **Show the funnel** — user sees the journey (7 → 3 → 1) so the winner is justified
+## Example Output
+
+After a brainstorm about choosing a payment provider, you'd see something like:
+
+> **Winner:** Stripe Payment Links (not full Checkout integration)
+>
+> **Why it won:** Zero backend code needed. Embed in landing page today. Upgrade to full Checkout only if conversion > 2%. Lemon Squeezy killed in R2 (no webhook reliability data). Paddle killed in R1 (EU-only tax handling, you need global).
+>
+> **Timeline:** 2 hours to first payment link. 1 day to embed + test.
+>
+> **Go/no-go:** If < 10 payments in first week, switch to direct Stripe Checkout.
+>
+> **Fact-check:** 5/5 claims confirmed (Stripe pricing, Paddle EU limitation, Lemon Squeezy webhook issues).
+
+---
 
 ## Gotchas
 
-- **Requires `GOOGLE_API_KEY`** — without it, Gemini calls fail silently. Check your `.env`
-- **`google-genai` not `google-generativeai`** — the new SDK package name (March 2026)
-- **User check-in after R2 is mandatory** — prevents models from converging on something you don't want
-- **Additional rounds are possible** — R4+ when go/no-go test produces new data or fact-check invalidates R3
-- **Flash-Lite model ID is `gemini-3.1-flash-lite-preview`** — not Flash, not Lite separately
+- **Requires `GOOGLE_API_KEY`** -- without it, Gemini calls fail silently
+- **Package is `google-genai`** not `google-generativeai` -- the SDK was renamed
+- **User check-in after Round 2 is mandatory** -- prevents the models from converging on something you don't care about
+- **Works for any decision** -- not just technical. Hiring, marketing, product strategy, architecture
+
+---
 
 ## Part of the AWRSHIFT Ecosystem
 
-- [**skill-awrshift**](https://github.com/awrshift/skill-awrshift) — adaptive decision-making framework (Quick / Standard / Scientific)
-- [**AWRSHIFT Framework**](https://github.com/awrshift/awrshift) — the full methodology
-- [**ClawClaw Soul**](https://clawclawsoul.com) — persistent identity protocol for AI agents
+| Skill | What It Does |
+|-------|-------------|
+| **[skill-brainstorm](https://github.com/awrshift/skill-brainstorm)** | You're here. 3-round adversarial brainstorm |
+| [skill-gemini](https://github.com/awrshift/skill-gemini) | Gemini inside Claude Code -- ask, ground, image, review |
+| [skill-awrshift](https://github.com/awrshift/skill-awrshift) | Adaptive decision framework (Quick / Standard / Scientific) |
+| [skill-telegram](https://github.com/awrshift/skill-telegram) | Telegram: read, parse channels, voice notes |
+| [claude-starter-kit](https://github.com/awrshift/claude-starter-kit) | All skills pre-configured + project template |
+
+---
 
 ## Contributing
 
@@ -140,7 +181,7 @@ In v2, we sent everything to Pro with `--grounded`. Problem: Pro spent 40% of th
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
+MIT -- see [LICENSE](LICENSE) for details.
 
 ---
 
