@@ -12,7 +12,7 @@ Before first brainstorm, verify these prerequisites:
 
 1. **Find `gemini.py`** — bundled at `scripts/gemini.py` relative to this SKILL.md. Locate it with:
    ```bash
-   find . ~/.claude/skills -name gemini.py -path '*/brainstorm/*' 2>/dev/null | head -1
+   find . ~/.claude/skills -name gemini.py -path '*/gemini/*' 2>/dev/null | head -1
    ```
    Store the result as `GEMINI` variable for the session.
 
@@ -155,7 +155,8 @@ so we can verify it before Round 2.
 
 **Mid-round verification** (only if R1 introduced new technologies):
 ```bash
-python3 $GEMINI ask "Verify: [new tech from R1]" \
+python3 $GEMINI ask \
+  "Verify these technologies: [new tech from R1]. Current version, pricing, license, compatibility with [our stack]." \
   -m gemini-3.1-flash-lite-preview --grounded --save /tmp/brainstorm-${AGENT}-r1-verify.md
 ```
 
@@ -310,6 +311,11 @@ python3 $GEMINI ask @/tmp/brainstorm-${AGENT}-ground.txt \
 # R1: Pro reasoning (ungrounded)
 python3 $GEMINI second-opinion @/tmp/brainstorm-${AGENT}-r1.txt \
   --save /tmp/brainstorm-${AGENT}-r1-response.md
+
+# R1.5: Flash-Lite verify new tech (only if R1 introduced unverified tech)
+python3 $GEMINI ask \
+  "Verify these technologies: [new tech from R1]. Current version, pricing, license, compatibility with [our stack]." \
+  -m gemini-3.1-flash-lite-preview --grounded --save /tmp/brainstorm-${AGENT}-r1-verify.md
 
 # R2: Pro reasoning (ungrounded)
 python3 $GEMINI second-opinion @/tmp/brainstorm-${AGENT}-r2.txt \
